@@ -7,8 +7,8 @@
 #define CEN_2 9
 #define CEN_1 10
 
-#define SW_EN_THRESH_H 635
-#define SW_EN_THRESH_L 500
+#define SW_EN_THRESH_H 800
+#define SW_EN_THRESH_L 450
 
 #define AUTO_EN_PULSE 1500 // time to wait between checking for auto enables
 
@@ -29,7 +29,7 @@ int cens[] = {
 };
 
 int enabled_usb = -1;
-int auto_timer = 0;
+long auto_timer = 0;
 
 void readButtons() {
   /* Read and update the voltages for each button */
