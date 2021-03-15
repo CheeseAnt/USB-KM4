@@ -7,9 +7,8 @@
 #define CEN_2 9
 #define CEN_1 10
 
-#define AUTO_EN_THRESH 910
-#define SW_EN_THRESH_H 700
-#define SW_EN_THRESH_L 650
+#define SW_EN_THRESH_H 635
+#define SW_EN_THRESH_L 500
 
 #define AUTO_EN_PULSE 1500 // time to wait between checking for auto enables
 
@@ -46,7 +45,7 @@ int autoOnPin() {
   int auto_pin = -1;
   
   for(int i=0; i<4; i++) {
-    bool button_auto = (but_vals[i] > AUTO_EN_THRESH);
+    bool button_auto = (but_vals[i] >= SW_EN_THRESH_H);
     
     if(button_auto & (auto_pin == -1)) {
       auto_pin = i;
@@ -126,10 +125,12 @@ void loop() {
   // check for any actual presses
   result = checkButtonPress();
 
-  if((result == -1) & ((millis() - auto_timer) > AUTO_EN_PULSE)) {
+  if(result == -1) {
       result = autoOnPin();
   }
-  
-  // enable whichever port was chosen
-  enableUSB(result);
+
+  if((millis() - auto_timer) > AUTO_EN_PULSE) {
+      // enable whichever port was chosen, only switching once every 1.5 seconds
+      enableUSB(result);
+  }
 }
